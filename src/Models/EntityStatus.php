@@ -36,11 +36,16 @@ class EntityStatus extends Model {
         ]);
     }
 
-
     public function setStatusAttribute($value) {
-        $e = $this->entity()->first();
         $this->attributes['status'] = $value;
-        $this->attributes['description'] = QuoteProcedureController::EnumLabel($status);
+        $this->attributes['description'] = $this->getDescription($value);
+    }
+
+    private function getDescription($value) {
+        $e = $this->entity()
+                  ->first();
+        $sd = $e->entityStatusDescriptions();
+        return $sd->getDescription($value);
     }
 
 }

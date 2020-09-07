@@ -12,7 +12,7 @@ class EntityStatusServiceProvider extends ServiceProvider implements HasInstalla
     public function boot(): void {
         $this->loadMigrationsFrom([
             __DIR__ . '/database/migrations',
-            database_path('migrations/entity_status'),
+            database_path('migrations/entity-status'),
         ]);
 
         $this->declareMigrationGlobal();
@@ -27,7 +27,7 @@ class EntityStatusServiceProvider extends ServiceProvider implements HasInstalla
         $this->declareMigration([
             'connection'   => 'mysql',
             'migrations'   => [
-                'local_path' => base_path() . '/vendor/larangular/entity_status/database/migrations',
+                'local_path' => base_path() . '/vendor/larangular/entity-status/database/migrations',
             ],
             'seeds'        => [
                 'local_path' => __DIR__ . '/../database/seeds',
