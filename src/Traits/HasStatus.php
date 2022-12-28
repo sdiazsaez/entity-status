@@ -15,6 +15,10 @@ trait HasStatus {
         return $this->morphOne(EntityStatus::class, 'entity');
     }
 
+    public function entityStatusMorphWhereKey(string $key) {
+        return $this->morphOne(EntityStatus::class, 'entity')->where('key', $key);
+    }
+
     public function entityStatus(string $key, $value = null, $message = null) {
         $w = ['key' => Str::slug($key)];
         return is_null($value)
