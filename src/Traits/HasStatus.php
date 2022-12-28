@@ -22,8 +22,8 @@ trait HasStatus {
     public function entityStatus(string $key, $value = null, $message = null) {
         $w = ['key' => Str::slug($key)];
         return is_null($value)
-            ? $this->status()->where($w)->first()
-            : $this->status()->updateOrCreate($w, ['status' => $value, 'message' => $message]);
+            ? $this->entityStatusMorph()->where($w)->first()
+            : $this->entityStatusMorph()->updateOrCreate($w, ['status' => $value, 'message' => $message]);
     }
 
     public function setEntityStatus(string $key, $value) {
