@@ -6,29 +6,38 @@
 namespace Larangular\EntityStatus\Routes;
 
 use Illuminate\Support\Facades\Route;
-use Msd\Permissions\Http\Controllers\Roles\ComponentGateway as Gateway;
+use Larangular\EntityStatus\Http\Controllers\EntityGateway as Gateway;
 
 class EntityRoutes {
 
     public static function routes(): void {
-        Route::get('role', [
+        $key = 'entity-status';
+        Route::get($key, [
             Gateway::class,
             'index',
         ])
-             ->name('role.index');
+             ->name($key . '.index');
 
-        /*
-        Route::get('metadata/{metadata}', [
+        Route::get($key . '/{entityStatus}', [
             Gateway::class,
             'show',
         ])
-             ->name('metadata.show');
-*/
-        Route::post('role', [Gateway::class, 'store'])
-             ->name('role.store');
+             ->name($key . '.show');
 
-        Route::match(['put', 'patch'], 'role/{metadata}', [Gateway::class, 'store'])
-             ->name('role.update');
+        Route::post($key, [
+            Gateway::class,
+            'store',
+        ])
+             ->name($key . '.store');
+
+        Route::match([
+            'put',
+            'patch',
+        ], $key . '/{entity}', [
+            Gateway::class,
+            'store',
+        ])
+             ->name($key . '.update');
 
     }
 

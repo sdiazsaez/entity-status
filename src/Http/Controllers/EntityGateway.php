@@ -26,24 +26,19 @@ class EntityGateway {
             return [];
         }
 
-        return $this->makeResponse($entityStatus->entityStatus()
+
+        return $this->makeResponse($entityStatus->entityStatusMorph()
                                                 ->get());
     }
 
-    public function show($metable, $metadata) {
-        return $this->makeResponse($metadata);
+    public function show($entity, EntityStatus $entityStatus) {
+        return $this->makeResponse($entityStatus);
     }
 
     public function store(StoreEntityStatusRequest $request, $entity) {
         $validated = $request->validated();
-
-        if (!is_array($validated['role_id'])) {
-            $validated['role_id'] = [$validated['role_id']];
-        }
-
         $entity->entityStatus($validated['key'], $validated['status'], $validated['message']);
         return $this->makeResponse($entity->entityStatus($validated['key']));
     }
-
 
 }
