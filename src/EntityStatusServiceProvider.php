@@ -2,6 +2,8 @@
 
 namespace Larangular\EntityStatus;
 
+use Larangular\EntityStatus\Models\EntityStatus;
+use Larangular\EntityStatus\Observers\EntityStatusObserver;
 use Larangular\Installable\{Contracts\HasInstallable, Contracts\Installable, Installer\Installer};
 use Larangular\Installable\Support\{InstallableServiceProvider as ServiceProvider, PublisableGroups};
 
@@ -10,6 +12,7 @@ class EntityStatusServiceProvider extends ServiceProvider implements HasInstalla
     protected $defer = false;
 
     public function boot(): void {
+        EntityStatus::observe(EntityStatusObserver::class);
         $this->loadMigrationsFrom([
             __DIR__ . '/database/migrations',
             database_path('migrations/entity-status'),
