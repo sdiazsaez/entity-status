@@ -11,7 +11,7 @@ trait HasStatus {
 
     abstract public function entityStatusDescriptions(string $key): EntityStatusDescriptions;
 
-    public function status(): MorphOne {
+    public function entityStatusMorph(): MorphOne {
         return $this->morphOne(EntityStatus::class, 'entity');
     }
 
