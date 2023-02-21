@@ -14,8 +14,8 @@ trait HasStatus {
         return $this->morphMany(EntityStatus::class, 'entity');
     }
 
-    public function entityStatusesWhereKey(string $key) {
-        return $this->entityStatuses()->where('key', $key);
+    public function entityStatusWhereKey(string $key) {
+        return $this->morphOne(EntityStatus::class, 'entity')->where('key', $key);
     }
 
     public function entityStatus(string $key, $value = null, $message = null) {
