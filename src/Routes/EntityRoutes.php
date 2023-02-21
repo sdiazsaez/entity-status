@@ -6,7 +6,7 @@
 namespace Larangular\EntityStatus\Routes;
 
 use Illuminate\Support\Facades\Route;
-use Larangular\EntityStatus\Http\Controllers\EntityGateway as Gateway;
+use Larangular\EntityStatus\Http\Controllers\EntityProviderGateway as Gateway;
 
 class EntityRoutes {
 
