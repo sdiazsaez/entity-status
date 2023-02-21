@@ -9,9 +9,6 @@ use Larangular\EntityStatus\Http\Requests\StoreEntityStatusRequest;
 use Larangular\EntityStatus\Models\EntityStatus;
 use Larangular\EntityStatus\Traits\HasStatus;
 use Larangular\RoutingController\MakeResponse;
-use Msd\Permissions\Http\Requests\StoreEntityRoleRequest;
-use Msd\Permissions\Models\Role;
-use Spatie\Permission\Traits\HasRoles;
 
 class EntityGateway {
 
@@ -26,9 +23,7 @@ class EntityGateway {
             return [];
         }
 
-
-        return $this->makeResponse($entityStatus->entityStatusMorph()
-                                                ->get());
+        return $this->makeResponse($entityStatus->entityStatuses()->get());
     }
 
     public function show($entity, EntityStatus $entityStatus) {
@@ -37,7 +32,7 @@ class EntityGateway {
 
     public function store(StoreEntityStatusRequest $request, $entity) {
         $validated = $request->validated();
-        $entity->entityStatus($validated['key'], $validated['status'], $validated['message']);
+        $entity->entityStatus($validated['key'], $validated['status'], @$validated['message'] ?? null);
         return $this->makeResponse($entity->entityStatus($validated['key']));
     }
 

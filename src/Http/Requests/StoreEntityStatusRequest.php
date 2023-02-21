@@ -25,7 +25,7 @@ class StoreEntityStatusRequest extends FormRequest {
     public function rules() {
         return [
             'key'    => 'required|string',
-            'status' => 'required|number',
+            'status' => 'required|numeric',
             'message' => 'nullable|string'
         ];
     }
