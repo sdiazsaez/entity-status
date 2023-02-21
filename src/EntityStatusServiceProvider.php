@@ -13,6 +13,7 @@ class EntityStatusServiceProvider extends ServiceProvider implements HasInstalla
 
     public function boot(): void {
         EntityStatus::observe(EntityStatusObserver::class);
+        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
         $this->loadMigrationsFrom([
             __DIR__ . '/database/migrations',
             database_path('migrations/entity-status'),
