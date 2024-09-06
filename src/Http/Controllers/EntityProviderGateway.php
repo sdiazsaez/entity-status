@@ -5,6 +5,7 @@
 
 namespace Larangular\EntityStatus\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Larangular\EntityStatus\Http\Requests\StoreEntityStatusRequest;
 use Larangular\EntityStatus\Models\EntityStatus;
 use Larangular\EntityStatus\Traits\HasStatus;
@@ -18,12 +19,30 @@ class EntityProviderGateway {
         return EntityStatus::class;
     }
 
-    public function index($entityStatus) {
-        if (!instance_has_trait($entityStatus, HasStatus::class)) {
+
+    public function index($entity, Request $request) {
+        if (!instance_has_trait($entity, HasStatus::class)) {
             return [];
         }
 
-        return $this->makeResponse($entityStatus->entityStatuses()->get());
+        // Check if 'key' query parameter exists
+        if ($request->filled('key')) {
+            $key = $request->query('key');
+
+            // Fetch the specific entity status by key
+            $entityStatus = $entity->entityStatusWhereKey($key)->first();
+
+            // Return 404 if no entity status is found
+            if (!$entityStatus) {
+                return response()->json([
+                    'message' => 'Entity status not found for the provided key.',
+                ], 404);
+            }
+
+            return $this->makeResponse($entityStatus);
+        }
+
+        return $this->makeResponse($entity->entityStatuses()->get());
     }
 
     public function show($entity, EntityStatus $entityStatus) {
