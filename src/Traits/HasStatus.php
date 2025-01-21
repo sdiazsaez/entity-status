@@ -2,23 +2,31 @@
 
 namespace Larangular\EntityStatus\Traits;
 
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Str;
 use Larangular\EntityStatus\Contracts\EntityStatusDescriptions;
 use Larangular\EntityStatus\Models\EntityStatus;
 
 trait HasStatus {
 
-    abstract public function entityStatusDescriptions(): EntityStatusDescriptions;
+    abstract public function entityStatusDescriptions(string $key): EntityStatusDescriptions;
 
-    public function status(): MorphOne {
-        return $this->morphOne(EntityStatus::class, 'entity');
+    public function entityStatuses() {
+        return $this->morphMany(EntityStatus::class, 'entity');
     }
 
-    public function setEntityStatus($value) {
-        $s = $this->status()->firstOrNew([]);
-        $s->status = $value;
-        $s->save();
-        return $this;
+    public function entityStatusWhereKey(string $key) {
+        return $this->morphOne(EntityStatus::class, 'entity')->where('key', $key);
+    }
+
+    public function entityStatus(string $key, $value = null, $message = null) {
+        $w = ['key' => Str::slug($key)];
+        return is_null($value)
+            ? $this->entityStatuses()->where($w)->first()
+            : $this->entityStatuses()->updateOrCreate($w, ['status' => $value, 'message' => $message]);
+    }
+
+    public function setEntityStatus(string $key, $value) {
+        return $this->entityStatus($key, $value);
     }
 
 }

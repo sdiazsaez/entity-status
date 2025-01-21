@@ -4,6 +4,7 @@ namespace Larangular\EntityStatus\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Str;
 use Larangular\Installable\Facades\InstallableConfig;
 use Larangular\RoutingController\Model as RoutingModel;
 
@@ -12,6 +13,7 @@ class EntityStatus extends Model {
     use RoutingModel;
 
     protected $fillable = [
+        'key',
         'status',
         'description',
         'message',
@@ -36,6 +38,10 @@ class EntityStatus extends Model {
         ]);
     }
 
+    public function setKeyAttribute($value) {
+        $this->attributes['key'] = Str::slug($value);
+    }
+
     public function setStatusAttribute($value) {
         $this->attributes['status'] = $value;
         $this->attributes['description'] = $this->getDescription($value);
@@ -44,7 +50,7 @@ class EntityStatus extends Model {
     private function getDescription($value) {
         $e = $this->entity()
                   ->first();
-        $sd = $e->entityStatusDescriptions();
+        $sd = $e->entityStatusDescriptions($this->attributes['key']);
         return $sd->getDescription($value);
     }
 
