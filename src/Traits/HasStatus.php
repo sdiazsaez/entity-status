@@ -19,10 +19,28 @@ trait HasStatus {
     }
 
     public function entityStatus(string $key, $value = null, $message = null) {
-        $w = ['key' => Str::slug($key)];
-        return is_null($value)
-            ? $this->entityStatuses()->where($w)->first()
-            : $this->entityStatuses()->updateOrCreate($w, ['status' => $value, 'message' => $message]);
+        $slugKey = Str::slug($key);
+        $existing = $this->entityStatuses()->where('key', $slugKey)->first();
+
+        if (is_null($value)) {
+            return $existing;
+        }
+
+        if ($existing) {
+            $existing->update([
+                'status' => $value,
+                'message' => $message,
+            ]);
+            return $existing;
+        }
+
+        //firstOrNew pops entity_type, id...
+        $s = $this->entityStatuses()->firstOrNew(['key' => $slugKey]);
+        $s->status = $value;
+        $s->message = $message;
+        $s->save();
+
+        return $s;
     }
 
     public function setEntityStatus(string $key, $value) {
