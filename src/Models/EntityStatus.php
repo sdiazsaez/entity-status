@@ -14,6 +14,8 @@ class EntityStatus extends Model {
 
     protected $fillable = [
         'key',
+        'entity_type',
+        'entity_id',
         'status',
         'description',
         'message',
@@ -47,9 +49,20 @@ class EntityStatus extends Model {
         $this->attributes['description'] = $this->getDescription($value);
     }
 
+    public function updateDescription($value) {
+        $this->attributes['description'] = $this->getDescription($value);
+        $this->save();
+    }
+
     private function getDescription($value) {
-        $e = $this->entity()
-                  ->first();
+        if (empty($this->entity_type) || empty($this->entity_id)) {
+            return ''; // o alguna descripción por defecto
+        }
+
+        $e = $this->entity()->first();
+        if (!$e) {
+            return '';
+        }
         $sd = $e->entityStatusDescriptions($this->attributes['key']);
         return $sd->getDescription($value);
     }
