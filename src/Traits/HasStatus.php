@@ -8,8 +8,6 @@ use Larangular\EntityStatus\Models\EntityStatus;
 
 trait HasStatus {
 
-    abstract public function entityStatusDescriptions(string $key): EntityStatusDescriptions;
-
     public function entityStatuses() {
         return $this->morphMany(EntityStatus::class, 'entity');
     }
