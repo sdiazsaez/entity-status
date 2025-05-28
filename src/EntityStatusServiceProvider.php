@@ -19,8 +19,16 @@ class EntityStatusServiceProvider extends ServiceProvider implements HasInstalla
             database_path('migrations/entity-status'),
         ]);
 
+        $this->publishes([__DIR__ . '/../config/entity-status.php' => config_path('entity-status.php')], PublishableGroups::Config);
+
         $this->declareMigrationGlobal();
         $this->declareMigrationEntityStatus();
+    }
+
+    public function register(): void {
+        parent::register();
+        
+        $this->mergeConfigFrom(__DIR__ . '/../config/entity-status.php', 'entity-status');
     }
 
     public function installer(): Installable {

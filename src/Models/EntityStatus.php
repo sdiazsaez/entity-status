@@ -67,5 +67,31 @@ class EntityStatus extends Model {
         return $sd->getDescription($value);
     }
 
+    private function getDescription($value) {
+        if (empty($this->entity_type) || empty($this->entity_id)) {
+            return '';
+        }
+
+        $entity = $this->entity()->first();
+        if (!$entity) {
+            return '';
+        }
+
+        // Try model-defined description provider first
+        if (method_exists($entity, 'entityStatusDescriptions')) {
+            $provider = $entity->entityStatusDescriptions($this->attributes['key']);
+            return $provider->getDescription($value);
+        }
+
+        // Fallback: use enum defined in config
+        $enumClass = config("entity-status.enums.{$this->attributes['key']}");
+        if (is_string($enumClass) && class_exists($enumClass) && method_exists($enumClass, 'getLabel')) {
+            return $enumClass::getLabel($value) ?? (string) $value;
+        }
+
+        return (string) $value;
+    }
+
+
 }
 
