@@ -5,7 +5,7 @@ namespace Larangular\EntityStatus;
 use Larangular\EntityStatus\Models\EntityStatus;
 use Larangular\EntityStatus\Observers\EntityStatusObserver;
 use Larangular\Installable\{Contracts\HasInstallable, Contracts\Installable, Installer\Installer};
-use Larangular\Installable\Support\{InstallableServiceProvider as ServiceProvider, PublisableGroups};
+use Larangular\Installable\Support\{InstallableServiceProvider as ServiceProvider, PublishableGroups};
 
 class EntityStatusServiceProvider extends ServiceProvider implements HasInstallable {
 
