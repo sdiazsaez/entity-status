@@ -56,19 +56,6 @@ class EntityStatus extends Model {
 
     private function getDescription($value) {
         if (empty($this->entity_type) || empty($this->entity_id)) {
-            return ''; // o alguna descripción por defecto
-        }
-
-        $e = $this->entity()->first();
-        if (!$e) {
-            return '';
-        }
-        $sd = $e->entityStatusDescriptions($this->attributes['key']);
-        return $sd->getDescription($value);
-    }
-
-    private function getDescription($value) {
-        if (empty($this->entity_type) || empty($this->entity_id)) {
             return '';
         }
 
